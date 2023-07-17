@@ -19,6 +19,7 @@ public class Tsubuyaki {
     Long id; //つぶやきエンティティの識別子
     String name;    //名前
     String comment; //コメント
+    String keyword;
     @Temporal(TemporalType.TIMESTAMP)
     Date createdAt; //作成日時
 }

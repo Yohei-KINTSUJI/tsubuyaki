@@ -26,7 +26,9 @@ public class TsubuyakiController {
     String showTsubuyakiList(Model model) {
         final List<Tsubuyaki> list = ts.getAllTsubuyaki(); //全つぶやきを取得
         model.addAttribute("tsubuyakiList", list);   //モデル属性にリストをセット
-        model.addAttribute("tsubuyakiForm", new TsubuyakiForm());  //空フォームをセット
+        model.addAttribute("tsubuyakiForm", new TsubuyakiForm());  //空フォームをセット        
+        model.addAttribute("searchList", list);   //モデル属性にリストをセット
+        model.addAttribute("searchForm", new SearchForm());  //空フォームをセット    
         return "tsubuyaki_list"; //リスト画面を返す
     }
     //つぶやきを投稿
@@ -40,22 +42,13 @@ public class TsubuyakiController {
         ts.postTsubuyaki(t);
         return "redirect:/read"; //メイン画面に転送
     }
-
-    //検索結果画面を表示
+    // 検索結果表示
     @GetMapping("/search")
-    String showSearchList(Model model, String keyword) {
-        final List<Tsubuyaki> list = ts.searchTsubuyaki(keyword);        
-        model.addAttribute("searchList", list);   //モデル属性にリストをセット
-        model.addAttribute("searchForm", new SearchForm());  //空フォームをセット        
+    String searchTsubuyaki(@ModelAttribute("searchForm") Tsubuyaki sform, Model model) {        
+        final List<Tsubuyaki> list = ts.searchTsubuyaki(sform.getKeyword()); //つぶやきを検索      
+        model.addAttribute("searchList", list);   //モデル属性にリストをセット 
+        ts.searchTsubuyaki(sform.getKeyword());
         return "search_list"; //リスト画面を返す
     }
-
-    // つぶやきを検索
-    @PostMapping("/search")
-    String searchTsubuyaki(@ModelAttribute("searchForm") Tsubuyaki form, String keyword, Model model) {
-        ts.searchTsubuyaki(keyword);
-        return "redirect:/search"; //メイン画面に転送
-    }
-  
 
 }
